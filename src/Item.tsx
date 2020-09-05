@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 import { TNote, TItemComponent } from "./types";
 
@@ -7,6 +8,8 @@ const Item = ({ items, removeNote, updateNote }: TItemComponent) => {
   const [id, setId] = React.useState<number>();
   const [text, setText] = React.useState<string>();
   const [description, setDescription] = React.useState<string>();
+
+  const { t } = useTranslation();
 
   const handleEdit = ({ id, text, description }: TNote) => {
     setId(id);
@@ -29,8 +32,8 @@ const Item = ({ items, removeNote, updateNote }: TItemComponent) => {
             <div>
               {item.id}: {item.text} - {item.description}
             </div>
-            <button onClick={() => handleEdit(item)}>edit</button>
-            <button onClick={() => removeNote(item.id)}>delete</button>
+        <button onClick={() => handleEdit(item)}>{t('EDIT')}</button>
+        <button onClick={() => removeNote(item.id)}>{t('DELETE')}</button>
           </div>
         );
       })}
@@ -42,8 +45,8 @@ const Item = ({ items, removeNote, updateNote }: TItemComponent) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <button onClick={() => setVisible(false)}>cancel</button>
-          <button onClick={() => handleSave()}>save</button>
+          <button onClick={() => setVisible(false)}>{t('CANCEL')}</button>
+      <button onClick={() => handleSave()}>{t('SAVE')}</button>
         </div>
       )}
     </div>

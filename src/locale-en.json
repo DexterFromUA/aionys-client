@@ -1,0 +1,12 @@
+{
+    "translation": {
+        "ADD_NEW_NOTE": "Add new note",
+        "ADD_NOTE": "Add note",
+        "EDIT": "edit",
+        "DELETE": "delete",
+        "SEARCH_BY_ID": "Search by ID",
+        "SEARCH": "Search",
+        "CANCEL": "cancel",
+        "SAVE": "save"
+    }
+}

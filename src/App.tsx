@@ -1,6 +1,7 @@
 import React from "react";
 import { Dispatch, bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
 import "./App.scss";
 
 import {
@@ -33,6 +34,14 @@ const App = ({
   const [description, setDescription] = React.useState("");
   const [search, setSearch] = React.useState();
 
+  const { t, i18n } = useTranslation();
+
+  const handleLng = (e: any, lng: string) => {
+    e.preventDefault();
+
+    i18n.changeLanguage(lng);
+  };
+
   const getRandomIntInclusive = (min: number, max: number) => {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -55,7 +64,7 @@ const App = ({
   return (
     <div className="App">
       <div className="App__left">
-        <h1>Add new note:</h1>
+        <h1>{t("ADD_NEW_NOTE")}:</h1>
         <div className="App__create">
           <input
             type="text"
@@ -70,7 +79,7 @@ const App = ({
             onKeyDown={(e) => handleKeyPress(e)}
           />
           <button title="add" onClick={handleAddButton}>
-            Add note
+            {t("ADD_NOTE")}
           </button>
         </div>
         <div className="App__list">
@@ -78,19 +87,26 @@ const App = ({
         </div>
       </div>
       <div className="App__preview">
-        <h1>Search by ID:</h1>
+        <div>
+          <button onClick={(e) => handleLng(e, "en")}>english</button>
+          <button onClick={(e) => handleLng(e, "ru")}>русский</button>
+        </div>
+        <h1>{t("SEARCH_BY_ID")}:</h1>
         <div>
           <input
             type="number"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button onClick={() => getNoteById(search)}>search</button>
+          <button onClick={() => getNoteById(search)}>{t("SEARCH")}</button>
         </div>
-        {(selected.text !== undefined || selected.description !== undefined) && <div>
-          <text>TEXT: {selected.text}</text>
-          <text>DESCRIPTION: {selected.description}</text>
-        </div>}
+        {(selected.text !== undefined ||
+          selected.description !== undefined) && (
+          <div>
+            <text>TEXT: {selected.text}</text>
+            <text>DESCRIPTION: {selected.description}</text>
+          </div>
+        )}
       </div>
     </div>
   );

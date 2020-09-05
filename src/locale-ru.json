@@ -1,0 +1,12 @@
+{
+    "translation": {
+        "ADD_NEW_NOTE": "Добавить новую",
+        "ADD_NOTE": "Добавить",
+        "EDIT": "изменить",
+        "DELETE": "удалить",
+        "SEARCH_BY_ID": "Поиск по ID",
+        "SEARCH": "Поиск",
+        "CANCEL": "отмена",
+        "SAVE": "сохранить"
+    }
+}
