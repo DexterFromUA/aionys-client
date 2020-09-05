@@ -68,12 +68,14 @@ const App = ({
         <div className="App__create">
           <input
             type="text"
+            name="text"
             value={text}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => handleKeyPress(e)}
           />
           <input
             type="text"
+            name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             onKeyDown={(e) => handleKeyPress(e)}

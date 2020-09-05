@@ -29,9 +29,9 @@ const Item = ({ items, removeNote, updateNote }: TItemComponent) => {
       {items.map((item: any) => {
         return (
           <div key={item.id}>
-            <div>
+            <p>
               {item.id}: {item.text} - {item.description}
-            </div>
+            </p>
         <button onClick={() => handleEdit(item)}>{t('EDIT')}</button>
         <button onClick={() => removeNote(item.id)}>{t('DELETE')}</button>
           </div>
