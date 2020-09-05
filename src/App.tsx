@@ -3,23 +3,35 @@ import { Dispatch, bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import "./App.scss";
 
-import { addNote } from "./action";
+import {
+  addNote,
+  getNotes,
+  removeNote,
+  updateNote,
+  getNoteById,
+} from "./action";
 import Item from "./Item";
+// eslint-disable-next-line
+import { TNote, TAppComponent } from "./types";
 
-type TNote = {
-  id: Number;
-  text: String;
-  description?: String;
-};
+// TODO Fix das fucking type
+const App = ({
+  notes,
+  addNote,
+  getNotes,
+  removeNote,
+  updateNote,
+  getNoteById,
+  selected,
+}: any) => {
+  React.useEffect(() => {
+    getNotes();
+    // eslint-disable-next-line
+  }, []);
 
-type TApp = {
-  notes: Object[];
-  addNote: ({id, text, description}: TNote) => Object;
-};
-
-const App = ({ notes, addNote }: TApp) => {
   const [text, setInput] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const [search, setSearch] = React.useState();
 
   const getRandomIntInclusive = (min: number, max: number) => {
     min = Math.ceil(min);
@@ -29,7 +41,7 @@ const App = ({ notes, addNote }: TApp) => {
 
   const handleAddButton = () => {
     let id = getRandomIntInclusive(10000, 99999);
-    addNote({id, text, description});
+    addNote({ id, text, description });
     setInput("");
     setDescription("");
   };
@@ -43,6 +55,7 @@ const App = ({ notes, addNote }: TApp) => {
   return (
     <div className="App">
       <div className="App__left">
+        <h1>Add new note:</h1>
         <div className="App__create">
           <input
             type="text"
@@ -61,10 +74,24 @@ const App = ({ notes, addNote }: TApp) => {
           </button>
         </div>
         <div className="App__list">
-          <Item items={notes} />
+          <Item items={notes} removeNote={removeNote} updateNote={updateNote} />
         </div>
       </div>
-      <div className="App__preview">Pick the note for preview</div>
+      <div className="App__preview">
+        <h1>Search by ID:</h1>
+        <div>
+          <input
+            type="number"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button onClick={() => getNoteById(search)}>search</button>
+        </div>
+        {(selected.text !== undefined || selected.description !== undefined) && <div>
+          <text>TEXT: {selected.text}</text>
+          <text>DESCRIPTION: {selected.description}</text>
+        </div>}
+      </div>
     </div>
   );
 };
@@ -72,6 +99,7 @@ const App = ({ notes, addNote }: TApp) => {
 const mapStateToProps = (state: Record<string, any>) => {
   return {
     notes: state.notes,
+    selected: state.selected,
   };
 };
 
@@ -79,6 +107,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
       addNote,
+      getNotes,
+      removeNote,
+      updateNote,
+      getNoteById,
     },
     dispatch
   );

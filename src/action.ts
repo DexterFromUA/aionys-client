@@ -1,43 +1,83 @@
-type TNote = {
-  id: Number;
-  text: String;
-  description?: String;
-};
+import { Dispatch } from "redux";
+
+import { TNote } from "./types";
 
 export const getNotes = () => {
-    // fetch here
-}
-
-export const getNoteById = (id: Number) => {
-    // later
-}
-
-export const addNote = ({ id, text, description }: TNote) => {
-  return {
-    type: "ADD_NOTE",
-    payload: {
-      id,
-      text,
-      description,
-    },
+  return (dispatch: Dispatch) => {
+    fetch("http://localhost:8081/notes")
+      .then((res) => res.json())
+      .then((json) => dispatch({ type: "LOAD_NOTES", payload: json }))
+      .catch((e) => console.error(e));
   };
 };
-// TODO вынести типы в отдельный файл
+
+export const getNoteById = (id: Number) => {
+  return (dispatch: Dispatch) => {
+    fetch(`http://localhost:8081/note/${id}`)
+    .then((res) => res.json())
+    .then((json) => dispatch({ type: "GET_NOTE", payload: json }))
+    .catch((e) => console.error(e));
+  };
+};
+
+export const addNote = ({ id, text, description }: TNote) => {
+  return (dispatch: Dispatch) => {
+    fetch("http://localhost:8081/new", {
+      method: "POST",
+      body: JSON.stringify({
+        id,
+        text,
+        description,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) =>
+        dispatch({
+          type: "ADD_NOTE",
+          payload: {
+            id: json.id,
+            text: json.text,
+            description: json.description,
+          },
+        })
+      )
+      .catch((e) => console.error(e));
+  };
+};
 
 export const updateNote = ({ id, text, description }: TNote) => {
-  return {
-    type: "UPDATE_NOTE",
-    payload: {
-      id: id,
-      text: text,
-      description: description,
-    },
+  return (dispatch: Dispatch) => {
+    fetch(`http://localhost:8081/note/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        text,
+        description,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) =>
+        dispatch({
+          type: "UPDATE_NOTE",
+          payload: {
+            id: json.id,
+            text: json.text,
+            description: json.description,
+          },
+        })
+      )
+      .catch((e) => console.error(e));
   };
 };
 
 export const removeNote = (id: Number) => {
-  return {
-    type: "REMOVE_NOTE",
-    payload: id,
+  return (dispatch: Dispatch) => {
+    fetch(`http://localhost:8081/note/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((json) => dispatch({ type: "REMOVE_NOTE", payload: json.id }))
+      .catch((e) => console.error(e));
   };
 };

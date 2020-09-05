@@ -1,27 +1,53 @@
 import React from "react";
 
-type TItem = {
-  items: Object[];
-};
+import { TNote, TItemComponent } from "./types";
 
-const Item = ({ items }: TItem) => {
+const Item = ({ items, removeNote, updateNote }: TItemComponent) => {
+  const [visible, setVisible] = React.useState(false);
+  const [id, setId] = React.useState<number>();
+  const [text, setText] = React.useState<string>();
+  const [description, setDescription] = React.useState<string>();
+
+  const handleEdit = ({ id, text, description }: TNote) => {
+    setId(id);
+    setText(text);
+    setDescription(description);
+    setVisible(true);
+  };
+
+  const handleSave = () => {
+    updateNote({ id, text, description });
+    setVisible(false);
+  };
+
+  // TODO type fix
   return (
     <div>
       {items.map((item: any) => {
         return (
-          <div>
-            <div onClick={() => alert("click")} key={item.id}>
+          <div key={item.id}>
+            <div>
               {item.id}: {item.text} - {item.description}
             </div>
-            <button>edit</button>
-            <button>delete</button>
+            <button onClick={() => handleEdit(item)}>edit</button>
+            <button onClick={() => removeNote(item.id)}>delete</button>
           </div>
         );
       })}
+      {visible && (
+        <div>
+          <br />
+          <input value={text} onChange={(e) => setText(e.target.value)} />
+          <input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <button onClick={() => setVisible(false)}>cancel</button>
+          <button onClick={() => handleSave()}>save</button>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Item;
-
-// TODO type fix

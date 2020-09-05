@@ -6,6 +6,7 @@ import reducer from './reducer';
 
 const initialState = {
     notes: [],
+    selected: {},
 }
 
 const store = createStore(
